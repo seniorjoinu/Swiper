@@ -7,6 +7,7 @@ var defaults = {
     autoplay: false,
     autoplayDisableOnInteraction: true,
     autoplayStopOnLast: false,
+    autoplayDirection: 'next',
     // To support iOS's swipe-to-go-back gesture (when being used in-app, with UIWebView).
     iOSEdgeSwipeDetection: false,
     iOSEdgeSwipeThreshold: 20,
@@ -574,12 +575,20 @@ function autoplay() {
     s.autoplayTimeoutId = setTimeout(function () {
         if (s.params.loop) {
             s.fixLoop();
-            s._slideNext();
+            if (s.autoplayDirection === 'prev') {
+                s._slidePrev();
+            } else {
+                s._slideNext();
+            }
             s.emit('onAutoplay', s);
         }
         else {
             if (!s.isEnd) {
-                s._slideNext();
+                if (s.autoplayDirection === 'prev') {
+                    s._slidePrev();
+                } else {
+                    s._slideNext();
+                }
                 s.emit('onAutoplay', s);
             }
             else {
